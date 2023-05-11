@@ -3,6 +3,7 @@ CRUD básico con MongoDB y Python
 """
 from pymongo import MongoClient
 from bson import ObjectId
+from os import system
 
 MONGO_URI = 'mongodb://localhost'
 
@@ -62,9 +63,27 @@ def update_product():
     n_price = input("Nuevo precio: ")
     n_stock = input("Nuevo stock: ")
 
-    collection.update_one({"id" : ObjectId(id)}, {"$set" : {"name": n_name, "price":n_price, "stock": n_stock}})
+    collection.update_one({"_id":ObjectId(id)}, {"$set":{"name":n_name, "price": n_price, "stock":n_stock}})
+    system('cls')
     print("Producto actualizado")
+    find_product(id)
     print("-" * 50)
+
+def delete_product(id):
+    """Elimina un producto de la bd"""
+    print("Seguro que quiere eliminar el siguiente producto?")
+    find_product(id)
+    print("Escriba SI o NO")
+
+    while True:
+        res = input(": ")
+        if res == 'SI':
+            collection.delete_one({"_id" : ObjectId(id)})
+            print("El producto ha sido eliminado")
+            print("-" * 50)
+            break
+        elif res == 'NO':
+            break
 
 
 while True:
@@ -83,11 +102,20 @@ while True:
         print("691h")
         break
     elif res == 1:
+        system('cls')
         add_product()
+        
     elif res == 2:
+        system('cls')
         list_products()
     elif res == 3:
+        system('cls')
         id = input("Id del producto: ")
         find_product(id)
     elif res == 4:
+        system('cls')
         update_product()
+    elif res == 5:
+        system('cls')
+        id = input("Id del producto:")
+        delete_product(id)
